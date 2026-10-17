@@ -312,18 +312,73 @@ button{cursor:pointer}
   </div>
 </section>
 </section>
-<div class="footer">Fontes utilizadas: Relatórios de Tempo de Tramitação do TJPE Reports, Tabela de aplicação e regras de pontuação do Glossário do Prêmio Gestão, Eficiência e Qualidade da CGJPE — Ano 2026.</div>
+<div class="footer">Fontes utilizadas: “Tempo de Tramitação.xlsx”, “Tabela de aplicação.xlsx” e critérios de pontuação do Anexo II da Portaria CGJ nº 03/2026. A Tabela de Aplicação define as unidades, os indicadores aplicáveis e a pontuação máxima; as faixas de dias e pontos variam conforme o grupo de competência, nos termos da Portaria. Unidades existentes apenas na Tabela de Aplicação também aparecem na lista, com indicação de ausência de dados quando não constarem no relatório de tramitação. A linha 1 das planilhas é tratada como cabeçalho. A CARGA é interpretada como data, inclusive quando o Excel a fornece como número serial. A aplicação lê as planilhas diretamente do repositório no GitHub Pages. Para usar a versão publicada, abra o endereço do GitHub Pages; o index.html não carrega uma cópia incorporada da base.</div>
 </main>
 <script>
 
 const IND={
- I:{short:"I · Conhecimento",key:"Tempo de Tramitação dos processos pendentes líquidos de conhecimento",app:"IND I\nTEMPO_PENDENTE_LIQUIDO_DE_CONHECIMENTO",max:"Pontuação Máxima\nIND I\nTEMPO_PENDENTE_LIQUIDO_DE_CONHECIMENTO",bands:[[400,50],[600,35],[800,20],[Infinity,0]]},
- II:{short:"II · Ações Penais",key:"Tempo de Tramitação de Ações Penais pendentes líquidas",app:"IND II\nTEMPO_PENDENTE_LIQUIDO_ACAO_PENAL",max:"Pontuação Máxima\nIND II\nTEMPO_PENDENTE_LIQUIDO_ACAO_PENAL",bands:[[600,50],[800,35],[1000,20],[Infinity,0]]},
- III:{short:"III · Júri",key:"Tempo de Tramitação de Ações Penais de Competência do Júri",app:"IND III\nTEMPO_PENDENTE_LIQUIDO_JURI",max:"Pontuação Máxima\nIND III\nTEMPO_PENDENTE_LIQUIDO_JURI",bands:[[1000,50],[1250,35],[1400,20],[Infinity,0]]},
- IV:{short:"IV · Violência Doméstica",key:"Tempo de tramitação das Ações Penais Líquidas de Violência Doméstica e Familiar contra a Mulher",app:"IND IV\nTEMPO_PENDENTE_LIQUIDO_VIOL_DOM_EXCETO_FEM",max:"Pontuação Máxima\nIND IV\nTEMPO_PENDENTE_LIQUIDO_VIOL_DOM_EXCETO_FEM",bands:[[300,50],[350,35],[400,20],[Infinity,0]]},
- V:{short:"V · Feminicídio",key:"Tempo de tramitação das Ações Penais Líquidas de Feminicídio",app:"IND V\nTEMPO_PENDENTE_LIQUIDO_FEMINICIDIO",max:"Pontuação Máxima\nIND V\nTEMPO_PENDENTE_LIQUIDO_FEMINICIDIO",bands:[[300,50],[350,35],[400,20],[Infinity,0]]},
- VII:{short:"VII · Judicialização da Saúde",key:"Tempo de Tramitação das Ações de Judicialização da Saúde",app:"IND VII\nTEMPO_PENDENTE_LIQUIDO_SAUDE",max:"Pontuação Máxima\nIND VII\nTEMPO_PENDENTE_LIQUIDO_SAUDE",bands:[[200,50],[300,35],[400,20],[Infinity,0]]},
- VIII:{short:"VIII · Atos Infracionais",key:"Tempo de tramitação dos Processos de Apuração de Atos Infracionais",app:"IND VIII\nTEMPO_PENDENTE_LIQUIDO_ATO_INFRACIONAL",max:"Pontuação Máxima\nIND VIII\nTEMPO_PENDENTE_LIQUIDO_ATO_INFRACIONAL",bands:[[100,50],[125,35],[150,20],[Infinity,0]]}
+ I:{short:"I · Conhecimento",key:"Tempo de Tramitação dos processos pendentes líquidos de conhecimento",app:"IND I\nTEMPO_PENDENTE_LIQUIDO_DE_CONHECIMENTO",max:"Pontuação Máxima\nIND I\nTEMPO_PENDENTE_LIQUIDO_DE_CONHECIMENTO"},
+ II:{short:"II · Ações Penais",key:"Tempo de Tramitação de Ações Penais pendentes líquidas",app:"IND II\nTEMPO_PENDENTE_LIQUIDO_ACAO_PENAL",max:"Pontuação Máxima\nIND II\nTEMPO_PENDENTE_LIQUIDO_ACAO_PENAL"},
+ III:{short:"III · Júri",key:"Tempo de Tramitação de Ações Penais de Competência do Júri",app:"IND III\nTEMPO_PENDENTE_LIQUIDO_JURI",max:"Pontuação Máxima\nIND III\nTEMPO_PENDENTE_LIQUIDO_JURI"},
+ IV:{short:"IV · Violência Doméstica",key:"Tempo de tramitação das Ações Penais Líquidas de Violência Doméstica e Familiar contra a Mulher",app:"IND IV\nTEMPO_PENDENTE_LIQUIDO_VIOL_DOM_EXCETO_FEM",max:"Pontuação Máxima\nIND IV\nTEMPO_PENDENTE_LIQUIDO_VIOL_DOM_EXCETO_FEM"},
+ V:{short:"V · Feminicídio",key:"Tempo de tramitação das Ações Penais Líquidas de Feminicídio",app:"IND V\nTEMPO_PENDENTE_LIQUIDO_FEMINICIDIO",max:"Pontuação Máxima\nIND V\nTEMPO_PENDENTE_LIQUIDO_FEMINICIDIO"},
+ VII:{short:"VII · Judicialização da Saúde",key:"Tempo de Tramitação das Ações de Judicialização da Saúde",app:"IND VII\nTEMPO_PENDENTE_LIQUIDO_SAUDE",max:"Pontuação Máxima\nIND VII\nTEMPO_PENDENTE_LIQUIDO_SAUDE"},
+ VIII:{short:"VIII · Atos Infracionais",key:"Tempo de tramitação dos Processos de Apuração de Atos Infracionais",app:"IND VIII\nTEMPO_PENDENTE_LIQUIDO_ATO_INFRACIONAL",max:"Pontuação Máxima\nIND VIII\nTEMPO_PENDENTE_LIQUIDO_ATO_INFRACIONAL"}
+};
+
+/* Faixas do Anexo II da Portaria CGJ nº 03/2026.
+   A pontuação máxima de cada indicador continua sendo lida da Tabela de Aplicação. */
+const BAND_RULES={
+ I:{
+  default:[[500,50],[700,35],[900,20],[Infinity,0]],
+  byGroup:{
+   "JUIZADOS ESPECIAIS CIVEIS":[[60,50],[80,35],[100,20],[Infinity,0]],
+   "JUIZADOS ESPECIAIS MISTOS":[[60,50],[80,35],[100,20],[Infinity,0]],
+   "JUIZADOS ESPECIAIS CRIMINAIS":[[60,50],[80,35],[100,20],[Infinity,0]],
+   "VARAS DA INFÂNCIA E JUVENTUDE":[[80,50],[100,35],[120,20],[Infinity,0]],
+   "JUIZADOS ESPECIAIS FAZENDA PÚBLICA":[[170,50],[180,35],[200,20],[Infinity,0]],
+   "VARAS DE FAMÍLIA E REGISTRO CIVIL":[[300,50],[400,35],[500,20],[Infinity,0]],
+   "VARAS CÍVEIS E DE ACIDENTES DO TRABALHO CAPITAL":[[400,50],[600,35],[800,20],[Infinity,0]],
+   "VARAS CÍVEIS INTERIOR":[[400,50],[600,35],[800,20],[Infinity,0]],
+   "VARAS DE COMPETÊNCIA GERAL":[[400,50],[600,35],[800,20],[Infinity,0]],
+   "VARAS DE SUCESSÕES E REGISTROS PÚBLICOS":[[1500,50],[1600,35],[1700,20],[Infinity,0]],
+   "VARAS DOS EXECUTIVOS FISCAIS":[[1500,50],[1600,35],[1700,20],[Infinity,0]]
+  },
+  unitRules:[{group:"VARAS DE VIOLÊNCIA DOMÉSTICA E FAMILIAR CONTRA A MULHER",nameIncludes:"MEDIDAS PROTETIVAS",bands:[[120,50],[135,35],[150,20],[Infinity,0]]}]
+ },
+ II:{
+  default:[[600,50],[800,35],[1000,20],[Infinity,0]],
+  byGroup:{
+   "JUIZADOS ESPECIAIS MISTOS":[[250,50],[300,35],[350,20],[Infinity,0]],
+   "JUIZADOS ESPECIAIS CRIMINAIS":[[200,50],[250,35],[300,20],[Infinity,0]],
+   "VARAS CRIMINAIS":[[400,75],[550,30],[700,10],[Infinity,0]]
+  }
+ },
+ III:{
+  default:[[1000,50],[1250,35],[1400,20],[Infinity,0]],
+  byGroup:{"VARAS DO TRIBUNAL DO JÚRI":[[600,75],[750,30],[900,10],[Infinity,0]]}
+ },
+ IV:{
+  default:[[300,50],[350,35],[400,20],[Infinity,0]],
+  byGroup:{"VARAS DE VIOLÊNCIA DOMÉSTICA E FAMILIAR CONTRA A MULHER":[[200,75],[250,30],[300,10],[Infinity,0]]}
+ },
+ V:{
+  default:[[300,50],[350,35],[400,20],[Infinity,0]],
+  byGroup:{"VARAS DO TRIBUNAL DO JÚRI":[[250,75],[300,30],[350,10],[Infinity,0]]}
+ },
+ VII:{
+  default:[[200,50],[300,35],[400,20],[Infinity,0]],
+  byGroup:{
+   "JUIZADOS ESPECIAIS FAZENDA PÚBLICA":[[150,50],[200,35],[250,20],[Infinity,0]],
+   "JUIZADOS ESPECIAIS CIVEIS":[[150,10],[200,5],[250,3],[Infinity,0]],
+   "JUIZADOS ESPECIAIS MISTOS":[[150,10],[200,5],[250,3],[Infinity,0]],
+   "VARAS DE FAMÍLIA E REGISTRO CIVIL":[[150,10],[200,5],[250,3],[Infinity,0]]
+  }
+ },
+ VIII:{
+  default:[[100,50],[125,35],[150,20],[Infinity,0]],
+  byGroup:{"VARAS DA INFÂNCIA E JUVENTUDE":[[60,50],[75,35],[90,10],[Infinity,0]]}
+ }
 };
 const INDORDER=["I","II","III","IV","V","VII","VIII"];
 let rows=[],appRows=[],selected=new Set(),selectionSource=new Map(),scenario="current",baseDate=null,unitCode=null,currentIndicator="I",activeStrategy=null,locationFilter="",page={oldest:1,above:1};
@@ -349,29 +404,52 @@ function applicable(code,ind){const r=appRow(code);return !!r && /^s(im)?$/i.tes
 function getUnitRows(ind){return rows.filter(r=>String(r['CÓD.SERVENTIA CNJ'])===String(unitCode)&&norm(r['INDICADOR'])===IND[ind].key)}
 function baseAverage(data){return data.length?data.reduce((a,r)=>a+num(r['QTD_DIAS_PENDENTE_LIQUIDO']),0)/data.length:null;}
 function age(r){const q=num(r['QTD_DIAS_PENDENTE_LIQUIDO']);if(scenario==='current')return q;const end=new Date(2026,11,31);const extra=Math.max(0,Math.round((end-baseDate)/86400000));return q+extra;}
-function scoreRaw(ind,avg){if(!Number.isFinite(avg))return 50;for(const [limit,pts] of IND[ind].bands)if(avg<=limit)return pts;return 0;}
-function score(ind,avg){return Math.min(scoreRaw(ind,avg),maxPoints(unitCode,ind));}
-function bandLabel(ind,avg){if(!Number.isFinite(avg))return '—';const pts=score(ind,avg);return pts+' pts';}
-function nextTarget(ind,avg){const b=IND[ind].bands;if(!Number.isFinite(avg))return null;const current=score(ind,avg), maxP=maxPoints(unitCode,ind);for(let i=0;i<b.length;i++){if(avg<=b[i][0]){for(let j=i-1;j>=0;j--)if(Math.min(b[j][1],maxP)>current)return{points:Math.min(b[j][1],maxP),target:b[j][0]};return{points:current,target:null};}}return{points:Math.min(20,maxP),target:800};}
-function bandText(ind){const b=IND[ind].bands;return `${b[0][1]} pts ≤ ${b[0][0]} · ${b[1][1]} pts ≤ ${b[1][0]} · ${b[2][1]} pts ≤ ${b[2][0]}`;}
+function bandsFor(ind,code=unitCode){
+ const rule=BAND_RULES[ind]||{};const app=appRow(code);
+ const group=norm(app?.GRUPO_COMPETÊNCIA).toLocaleUpperCase('pt-BR');
+ const name=norm(app?.SERVENTIA).toLocaleUpperCase('pt-BR');
+ const special=(rule.unitRules||[]).find(x=>x.group===group&&name.includes(x.nameIncludes));
+ return special?.bands||rule.byGroup?.[group]||rule.default||[[Infinity,0]];
+}
+function scoreRaw(ind,avg,code=unitCode){if(!Number.isFinite(avg))return 0;for(const [limit,pts] of bandsFor(ind,code))if(avg<=limit)return pts;return 0;}
+function score(ind,avg,code=unitCode){return Math.min(scoreRaw(ind,avg,code),maxPoints(code,ind));}
+function bandLabel(ind,avg){if(!Number.isFinite(avg))return '—';return score(ind,avg)+' pts';}
+function nextTarget(ind,avg){const b=bandsFor(ind,unitCode);if(!Number.isFinite(avg))return null;const current=score(ind,avg),maxP=maxPoints(unitCode,ind);for(let i=0;i<b.length;i++){if(avg<=b[i][0]){for(let j=i-1;j>=0;j--)if(Math.min(b[j][1],maxP)>current)return{points:Math.min(b[j][1],maxP),target:b[j][0]};return{points:current,target:null};}}return null;}
+function bandText(ind){return bandsFor(ind,unitCode).filter(([limit])=>Number.isFinite(limit)).map(([limit,pts])=>`${pts} pts ≤ ${fmt(limit)}`).join(' · ');}
 function scenarioRows(ind){return getUnitRows(ind).map((r,i)=>({...r,_id:String(r['NPU']),_age:age(r),_i:i})).filter(r=>Number.isFinite(r._age));}
 function tableRows(ind,target){let data=scenarioRows(ind);if(locationFilter)data=data.filter(r=>norm(r['LOCAL_PROCESSO'])===locationFilter);return data.sort((a,b)=>b._age-a._age);}
 function selectedData(ind){return scenarioRows(ind);}
 function recommendedOldest(ind,target){const full=scenarioRows(ind);if(!Number.isFinite(target)||!full.length)return [];const baseAvg=full.reduce((a,r)=>a+r._age,0)/full.length;if(baseAvg<=target)return [];const candidates=tableRows(ind,target).filter(r=>r._age>target);if(!candidates.length)return [];let sum=full.reduce((a,r)=>a+r._age,0),n=full.length;const out=[];for(const r of candidates){sum-=r._age;n--;out.push(r);if(n===0||sum/n<=target)break;}return out;}
 function simStats(ind){const data=selectedData(ind),remain=data.filter(r=>!selected.has(r._id));const sum=remain.reduce((a,r)=>a+r._age,0),avg=remain.length?sum/remain.length:null;return{remain,avg,score:remain.length?score(ind,avg):maxPoints(unitCode,ind),n:remain.length,total:data.length};}
-function allUnits(){return [...new Map(rows.map(r=>[String(r['CÓD.SERVENTIA CNJ']),norm(r['UNIDADE'])]))].map(([code,name])=>({code,name,group:appRow(code)?.GRUPO_COMPETÊNCIA||''})).sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));}
+function allUnits(){
+ const units=new Map();
+ for(const r of appRows){const code=String(r['COD_SERVENTIA_CNJ']??'').trim();if(!code)continue;units.set(code,{code,name:norm(r['SERVENTIA'])||code,group:norm(r['GRUPO_COMPETÊNCIA'])});}
+ for(const r of rows){const code=String(r['CÓD.SERVENTIA CNJ']??'').trim();if(!code)continue;const previous=units.get(code)||{code,name:code,group:''};units.set(code,{...previous,name:norm(previous.name)||norm(r['UNIDADE'])||code,group:previous.group||norm(appRow(code)?.GRUPO_COMPETÊNCIA)});}
+ return [...units.values()].sort((a,b)=>a.name.localeCompare(b.name,'pt-BR'));
+}
 function unitStats(code){let applicableCount=0,total=0,withData=0;for(const ind of INDORDER){if(applicable(code,ind)){applicableCount++;total+=maxPoints(code,ind);const d=rows.filter(r=>String(r['CÓD.SERVENTIA CNJ'])===String(code)&&norm(r['INDICADOR'])===IND[ind].key);if(d.length){withData++;total+=0;}}}return{applicableCount,withData,maxPoints:INDORDER.filter(i=>applicable(code,i)).reduce((a,i)=>a+maxPoints(code,i),0)};}
 function renderUnitList(){const q=norm(document.getElementById('unitSearch').value).toLocaleLowerCase('pt-BR');const list=allUnits().filter(u=>`${u.name} ${u.code} ${u.group}`.toLocaleLowerCase('pt-BR').includes(q));const listEl=document.getElementById('unitList');listEl.innerHTML='';document.getElementById('unitCount').textContent=`${list.length} unidade${list.length===1?'':'s'}`;document.getElementById('unitEmpty').style.display=list.length?'none':'block';for(const u of list){const b=document.createElement('button');b.type='button';b.className='unit-option'+(String(u.code)===String(unitCode)?' active':'');b.innerHTML=`<span><span class="unit-option-name">${escapeHtml(u.name)}</span><span class="unit-option-meta">Cód. CNJ ${escapeHtml(u.code)}</span></span><span class="unit-option-meta">${escapeHtml(u.group||'')}</span>`;b.addEventListener('click',()=>{selectUnit(u.code);document.getElementById('unitPicker').classList.remove('open');});listEl.appendChild(b);}}
 function escapeHtml(s){return String(s??'').replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]));}
-function selectUnit(code,scroll=true){unitCode=String(code);currentIndicator='I';selected.clear();selectionSource.clear();page={oldest:1,above:1};document.getElementById('dashboard').style.display='block';renderUnitList();document.getElementById('selectedUnitLabel').textContent=norm(rows.find(r=>String(r['CÓD.SERVENTIA CNJ'])===String(unitCode))?.UNIDADE)||unitCode;populateIndicatorSelect();renderDashboard();if(scroll)document.getElementById('dashboard').scrollIntoView({behavior:'smooth',block:'start'});}
+function selectUnit(code,scroll=true){unitCode=String(code);currentIndicator='I';selected.clear();selectionSource.clear();page={oldest:1,above:1};document.getElementById('dashboard').style.display='block';renderUnitList();document.getElementById('selectedUnitLabel').textContent=norm(appRow(unitCode)?.SERVENTIA)||norm(rows.find(r=>String(r['CÓD.SERVENTIA CNJ'])===String(unitCode))?.UNIDADE)||unitCode;populateIndicatorSelect();renderDashboard();if(scroll)document.getElementById('dashboard').scrollIntoView({behavior:'smooth',block:'start'});}
 function renderDashboard(){
- const app=appRow(unitCode);const unitName=norm(rows.find(r=>String(r['CÓD.SERVENTIA CNJ'])===String(unitCode))?.UNIDADE)||app?.SERVENTIA||'Unidade';
+ const app=appRow(unitCode);const unitName=norm(app?.SERVENTIA)||norm(rows.find(r=>String(r['CÓD.SERVENTIA CNJ'])===String(unitCode))?.UNIDADE)||'Unidade';
  document.getElementById('unitTitle').textContent=unitName;document.getElementById('unitSubtitle').textContent=`Cód. CNJ ${unitCode} · ${norm(app?.GRUPO_COMPETÊNCIA||'')||'grupo não informado'}`;
- let points=0,max=0,appCount=0,withData=0;for(const ind of INDORDER){if(!applicable(unitCode,ind))continue;appCount++;max+=maxPoints(unitCode,ind);const d=getUnitRows(ind);if(d.length){withData++;points+=score(ind,baseAverage(d));}else points+=maxPoints(unitCode,ind);}
- document.getElementById('kpis').innerHTML=`<div class="kpi"><div class="label">Pontuação atual</div><div class="value">${fmt(points)} pts</div><div class="sub">de ${fmt(max)} pontos aplicáveis</div></div><div class="kpi"><div class="label">Indicadores aplicáveis</div><div class="value">${appCount}/7</div><div class="sub">conforme a Tabela de Aplicação</div></div><div class="kpi"><div class="label">Com processos</div><div class="value">${withData}/${appCount}</div><div class="sub">indicadores com registros na base</div></div><div class="kpi"><div class="label">Carga da base</div><div class="value">${fmtDate(baseDate)}</div><div class="sub">Tempo de Tramitação</div></div>`;
- const grid=document.getElementById('indicatorGrid');grid.innerHTML='';let applicableCount=0;for(const ind of INDORDER){const meta=IND[ind],ap=applicable(unitCode,ind),data=getUnitRows(ind),avg=baseAverage(data);if(ap)applicableCount++;const pts=ap?(data.length?score(ind,avg):maxPoints(unitCode,ind)):0;const b=document.createElement('button');b.type='button';b.className='indicator-card'+(ap?'':' not-applicable')+(currentIndicator===ind&&document.getElementById('simulator').classList.contains('open')?' active':'');if(!ap){b.innerHTML=`<div class="ind-code">Indicador ${ind}</div><h3>${escapeHtml(meta.short.split('· ')[1]||meta.short)}</h3><div class="avg-big">Não se aplica</div><div class="card-line"><span>Conforme Tabela de Aplicação</span><span class="pill gray">0 pts</span></div><div class="card-footer"><span class="click-hint">Não aplicável nesta unidade</span></div>`;}else{const next=nextTarget(ind,avg),rec=next&&next.target!=null?recommendedOldest(ind,next.target):[];const progress=Math.max(0,Math.min(100,(pts/Math.max(1,maxPoints(unitCode,ind)))*100));let cls=pts>=50?'good':pts>=35?'mid':'bad';b.innerHTML=`<div class="ind-code">Indicador ${ind}</div><h3>${escapeHtml(meta.short.split('· ')[1]||meta.short)}</h3><div class="status-row"><span class="pill ${cls}">${pts} pontos</span><span class="click-hint">${data.length.toLocaleString('pt-BR')} processos</span></div><div class="avg-big">${data.length?fmt(avg):'—'} <small>${data.length?'dias médios':''}</small></div><div class="progress"><span style="width:${progress}%"></span></div><div class="card-line"><span>Faixas</span><span>${bandText(ind)}</span></div><div class="next-box">${next&&next.target!=null?`<strong>Próxima meta: ≤ ${fmt(next.target)} dias · ${next.points} pts</strong>${rec.length?`${rec.length} processo${rec.length===1?'':'s'} mais antigo${rec.length===1?'':'s'} na simulação.`:'A média já está na meta.'}`:'<strong>Maior faixa atingida</strong>Não há faixa superior neste indicador.'}</div><div class="card-footer"><span class="link-btn">Clique para simular</span><span class="click-hint">${currentIndicator===ind&&document.getElementById('simulator').classList.contains('open')?'Selecionado':'Abrir simulador'}</span></div>`;}
-b.addEventListener('click',()=>openIndicator(ind));grid.appendChild(b);}
-document.getElementById('indicatorCount').textContent=`${applicableCount} aplicáve${applicableCount===1?'l':'is'}`;
+ let points=0,max=0,appCount=0,withData=0;for(const ind of INDORDER){if(!applicable(unitCode,ind))continue;appCount++;max+=maxPoints(unitCode,ind);const d=getUnitRows(ind);if(d.length){withData++;points+=score(ind,baseAverage(d));}}
+ const pointsDisplay=withData?`${fmt(points)} pts`:'—';
+ document.getElementById('kpis').innerHTML=`<div class="kpi"><div class="label">Pontuação apurada</div><div class="value">${pointsDisplay}</div><div class="sub">Dados em ${withData} de ${appCount} indicadores aplicáveis · máximo total: ${fmt(max)} pts</div></div><div class="kpi"><div class="label">Indicadores aplicáveis</div><div class="value">${appCount}/7</div><div class="sub">conforme a Tabela de Aplicação</div></div><div class="kpi"><div class="label">Com processos</div><div class="value">${withData}/${appCount}</div><div class="sub">indicadores com registros na base</div></div><div class="kpi"><div class="label">Carga da base</div><div class="value">${fmtDate(baseDate)}</div><div class="sub">Tempo de Tramitação</div></div>`;
+ const grid=document.getElementById('indicatorGrid');grid.innerHTML='';let applicableCount=0;
+ for(const ind of INDORDER){
+  const meta=IND[ind],ap=applicable(unitCode,ind),data=getUnitRows(ind),avg=baseAverage(data);if(ap)applicableCount++;
+  const pts=ap&&data.length?score(ind,avg):null;const b=document.createElement('button');b.type='button';b.className='indicator-card'+(ap?'':' not-applicable')+(currentIndicator===ind&&document.getElementById('simulator').classList.contains('open')?' active':'');
+  if(!ap){b.innerHTML=`<div class="ind-code">Indicador ${ind}</div><h3>${escapeHtml(meta.short.split('· ')[1]||meta.short)}</h3><div class="avg-big">Não se aplica</div><div class="card-line"><span>Conforme Tabela de Aplicação</span><span class="pill gray">0 pts</span></div><div class="card-footer"><span class="click-hint">Não aplicável nesta unidade</span></div>`;}
+  else{
+   const next=nextTarget(ind,avg),rec=next&&next.target!=null?recommendedOldest(ind,next.target):[];const maxP=Math.max(1,maxPoints(unitCode,ind));const progress=pts==null?0:Math.max(0,Math.min(100,(pts/maxP)*100));const bandIndex=data.length?bandsFor(ind,unitCode).findIndex(([limit])=>avg<=limit):-1;const cls=pts==null?'gray':bandIndex===0?'good':bandIndex===1?'mid':'bad';
+   const nextHtml=!data.length?'<strong>Sem dados na base</strong>O indicador se aplica a esta unidade, mas não há registros correspondentes no relatório de tramitação carregado.':(next&&next.target!=null?`<strong>Próxima meta: ≤ ${fmt(next.target)} dias · ${next.points} pts</strong>${rec.length?`${rec.length} processo${rec.length===1?'':'s'} mais antigo${rec.length===1?'':'s'} na simulação.`:'A média já está na meta.'}`:'<strong>Maior faixa atingida</strong>Não há faixa superior neste indicador.');
+   b.innerHTML=`<div class="ind-code">Indicador ${ind}</div><h3>${escapeHtml(meta.short.split('· ')[1]||meta.short)}</h3><div class="status-row"><span class="pill ${cls}">${pts==null?'Sem dados':`${pts} pontos`}</span><span class="click-hint">${data.length.toLocaleString('pt-BR')} processos</span></div><div class="avg-big">${data.length?fmt(avg):'—'} <small>${data.length?'dias médios':''}</small></div><div class="progress"><span style="width:${progress}%"></span></div><div class="card-line"><span>Faixas</span><span>${bandText(ind)}</span></div><div class="next-box">${nextHtml}</div><div class="card-footer"><span class="link-btn">Clique para simular</span><span class="click-hint">${currentIndicator===ind&&document.getElementById('simulator').classList.contains('open')?'Selecionado':'Abrir simulador'}</span></div>`;
+  }
+  b.addEventListener('click',()=>openIndicator(ind));grid.appendChild(b);
+ }
+ document.getElementById('indicatorCount').textContent=`${applicableCount} aplicáve${applicableCount===1?'l':'is'}`;
 }
 function populateIndicatorSelect(){const sel=document.getElementById('indicator');sel.innerHTML='';for(const ind of INDORDER){if(!applicable(unitCode,ind))continue;const o=document.createElement('option');o.value=ind;o.textContent=`Indicador ${ind} · ${IND[ind].short}`;sel.appendChild(o);}if(currentIndicator&&applicable(unitCode,currentIndicator))sel.value=currentIndicator;else{const first=INDORDER.find(i=>applicable(unitCode,i));currentIndicator=first||null;if(first)sel.value=first;}}
 function openIndicator(ind){if(!applicable(unitCode,ind))return;currentIndicator=ind;activeStrategy=null;locationFilter='';selected.clear();selectionSource.clear();page={oldest:1,above:1};const next=nextTarget(ind,baseAverage(getUnitRows(ind)));document.getElementById('simulator').classList.add('open');document.getElementById('indicator').value=ind;document.getElementById('target').value=next&&next.target!=null?next.target:'';document.querySelectorAll('.scenario').forEach(x=>x.classList.toggle('active',x.dataset.scenario===scenario));renderDashboard();renderSimulator();document.getElementById('simulator').scrollIntoView({behavior:'smooth',block:'start'});}
